@@ -123,8 +123,14 @@ class MatchupsList(APIView):
         if position not in Valid_Positions:
             position = random.choice(Valid_Positions)
         players = players.filter(Position=position)
+        players = players.order_by('-Rating', 'Name')
         index1 = math.floor(abs(random.uniform(0,1) - random.uniform(0,1)) * (1 + players.count() - 10))
-        index2 = index1 + random.randrange(1,10)
+        index2 = math.floor(abs(random.uniform(0,1) - random.uniform(0,1)) * (1 + players.count() - 10))
+        if index1 == index2:
+            if index1 == 0:
+                index1 += 1
+            else:
+                index1 -= 1
         nextMatchup = Matchup(PlayerOne=players[index1], PlayerTwo=players[index2])
         return nextMatchup
     
